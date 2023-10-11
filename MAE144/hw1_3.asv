@@ -1,0 +1,44 @@
+%% MAE144 HW1 Problem 3
+clear all; close all; clc;
+
+%Define symbolics
+syms p1;
+syms z1;
+
+%Test Script
+ys = 20*[1 1]; xs = [1 10]; h = 0.01; Ds = RR_tf(ys, xs);
+
+%Run function based of test
+Dz = EAF_C2D_matched(Ds, h);
+
+%Test result against matlabs built-in functions
+Dstest = tf(ys, xs);
+Dztest = c2d(Dstest, h, 'matched');
+
+
+%Matched Method Function
+function [Dz] = EAF_C2D_matched(Ds, h, omega_bar, bool)
+    
+    %Initial Conditions: Default 
+    if nargin ~= 4, bool = 0; end
+    if bool ~= 1, bool = 0; end
+    if nargin == 2, omega_bar = 0; end
+       
+    z_s = RR_roots(Ds.num); p_s = RR_roots(Ds.den);
+    z_z = exp(h*z_s); p_z = exp(h*p_s);
+
+    m = Ds.num.n; n = Ds.den.n;
+    if bool == 0, n = n-1; end
+
+    while n > m
+        n = n - 1; z_z = [z_z -1];
+    end
+
+    Dz = RR_tf(z_z, p_z, 1); Dz.h = h;
+
+    dcgain_s = RR_evaluate(Ds, 1i*omega_bar); 
+    dcgain_z = RR_evaluate(Dz, exp(1i*omega_bar*h));
+
+    Dz = Dz * (dcgain_s/dcgain_z);
+
+end
