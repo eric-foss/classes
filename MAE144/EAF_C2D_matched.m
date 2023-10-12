@@ -5,6 +5,9 @@ function [Dz] = EAF_C2D_matched(Ds, h, omega_bar, bool)
     % specified, gain is adjusted appropriately.
     % If unspecified, omega_bar is defaulted to 0 (DC gain). 
     % If semi-proper TF is required, set bool equal to 1. 
+    % TEST CODE 1: ys = 20*[1 1]; xs = [1 10]; h = 0.01; 
+    %              Ds = RR_tf(ys, xs);
+    %              Dz = EAF_C2D_matched(Ds, h);
   
     if nargin ~= 4, bool = 0; end
     if bool ~= 1, bool = 0; end
