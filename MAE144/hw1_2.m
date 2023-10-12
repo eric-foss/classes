@@ -13,13 +13,6 @@ b = RR_poly([-5 -2 2 5], 1);
 %Run diophantine function
 [x, y] = RR_diophantine(a, b, f);
 
-%Define transfer functions
-G = RR_tf(b, a);
-
-D = RR_tf(y, x);
-
-T = (G*D)/(1 + G*D);
-
 %Test to see if a*x + b*y is equal to wanted f(s)
 test = trim(a*x + b*y);
 
