@@ -80,7 +80,7 @@ for i = 1:30
         y(i, j) = y0 - dy*(j-1);
         dist(i, j) = sqrt(x(i, j)^2 + y(i, j)^2)/100;
 
-        data(counter, :) = [dist(i, j), delay(i, j)];
+        data(counter, :) = [x(i, j), delay(i, j)];
   
         
 
@@ -117,20 +117,9 @@ plot(xplot, p(1)*xplot + p(2), '-r', 'LineWidth', 1.5); hold on;
 ss = 1/340;
 plot(xplot, ss*xplot, '--k', 'LineWidth', 1.5);
 
-legend('Experimental Data', 'Best Fit', 'Theoretical Result', 'Location', 'southeast');
+legend('Experimental Data', 'Experimental Fit (c = 340)', 'Theoretical Result (c= 340)', 'Location', 'southeast');
 %caption = sprintf('y = %f * x + %f', p(1), p(2));
 %text(0.25, 0.0013, caption, 'FontSize', 10, 'Color', 'r', 'FontWeight', 'bold');
 
-
-%% Question 6
-
-
-
-
-
-%% Question 7
-
-x6 = linspace(23, 46, 30);
-y6 = linspace(5, 15, 15);
 
      
