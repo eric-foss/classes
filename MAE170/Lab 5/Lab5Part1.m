@@ -22,56 +22,115 @@ xlabel('Time (ms)'); ylabel('Voltage (V)');
 %% Question 4
 load('lab5pt2.mat');
 
-dx = 23/30; dy = 10/15; %totalreal/totalexpected = realincrement
+dx = 23/29; dy = 10/14; %totalreal/totalexpected = realincrement
+
+x0 = 46; y0 = 15;
 
 delay = zeros(30, 15);
+dist = zeros(30, 15);
+x = zeros(30, 15);
+y = zeros(30, 15);
+data = zeros(30*15, 2);
+counter = 0;
+figure(2);
 for i = 1:30
     for j = 1:15
-        %stupid edge cases
+        
+        counter = counter + 1;
+
+        %time delay calcs
+
+        %stupid edge case
         if i == 1
             if j == 15
-                delay(i, j) = delay(i, j-1);
                 continue;
             end
         end
-
-        if i == 27
-            if j == 9
-                delay(i, j) = 191;
-                continue;
-            end
-        end
+        %stupid edge case
 
         sig = recMatrix_sig(:, i, j);
         maxs = islocalmax(sig);
         mins = islocalmin(sig);
-        maxs_index = find(maxs);
-        mins_index = find(mins);
+        extrema = maxs + mins;
 
-        for o = 1:length(maxs_index)
-            bool = 0;
-            if maxs_index(o+1) - maxs_index(o) > 15
-                if maxs_index(o+2) - maxs_index(o+1) > 15
-                    for o2 = 1:length(mins_index)
-                        if mins_index(o2+1) - mins_index(o2) > 15
-                            if mins_index(o2+2) - mins_index(o2+1) > 15
-                                if (mins_index(o2)-maxs_index(o)) > 7 && (mins_index(o2)-maxs_index(o)) < 13
-                                    bool = 1;
-                                    break;
-                                end
-                            end
-                        end
-                    end
-                    if bool == 1
-                        break;
-                    end
+        indexs = find(extrema);
+        temp = sig(indexs);
+
+        for o = 1:length(indexs)
+   
+            if abs(temp(o+1) - temp(o)) > 0.8
+                if abs(temp(o+2) - temp(o+1)) > 0.7
+                    break;
                 end
             end
         end
 
+        delay(i, j) = (indexs(o)- 100)/100000; %ms
+        
+        if j ~= 1
+            if abs(delay(i, j) - delay(i, j-1)) > 15
+                delay(i, j) = delay(i, j-1);
+            end
+        end
 
 
-        delay(i, j) = maxs_index(o); %- 100;
+        %distance calcs
+
+        x(i, j) = x0 - dx*(i-1);
+        y(i, j) = y0 - dy*(j-1);
+        dist(i, j) = sqrt(x(i, j)^2 + y(i, j)^2)/100;
+
+        data(counter, :) = [dist(i, j), delay(i, j)];
+  
+        
 
     end
 end
+
+data(15, :) = data(14, :);
+delay(1, 15) = delay(1, 14);
+x(1, 15) = 46;
+y(1, 15) = 5;
+
+datafiltered = rmoutliers(data, 'movmedian', 15);
+
+xplot = 0.2:0.01:0.5;
+xdata = datafiltered(:, 1);
+ydata = datafiltered(:, 2);
+
+% xneg = 0.003*ones(length(xdata), 1);
+% xpos = 0.003*ones(length(xdata), 1);
+% yneg = 0.00001*ones(length(ydata), 1);
+% ypos = 0.00001*ones(length(ydata), 1);
+%errorbar(xdata, ydata, yneg, ypos, xneg, xpos); hold on;
+
+
+plot(xdata, ydata, '.b'); hold on;
+
+xlabel('Distance Traveled (m)'); ylabel('Time Elapsed (s)');
+
+p = polyfit(xdata, ydata, 1);
+
+plot(xplot, p(1)*xplot + p(2), '-r', 'LineWidth', 1.5); hold on;
+
+
+ss = 1/340;
+plot(xplot, ss*xplot, '--k', 'LineWidth', 1.5);
+
+legend('Experimental Data', 'Best Fit', 'Theoretical Result', 'Location', 'southeast');
+%caption = sprintf('y = %f * x + %f', p(1), p(2));
+%text(0.25, 0.0013, caption, 'FontSize', 10, 'Color', 'r', 'FontWeight', 'bold');
+
+
+%% Question 6
+
+
+
+
+
+%% Question 7
+
+x6 = linspace(23, 46, 30);
+y6 = linspace(5, 15, 15);
+
+     
