@@ -1,0 +1,32 @@
+clear all; close all; clc;
+
+
+%%Metal Forced Plots
+
+%% 1
+
+load('lab6MetalForced1.mat');
+
+plateT1 = tempPlateC(71: end);
+ambT1 = tempAmbC(71: end);
+
+
+
+t = 0:length(plateT)-1;
+
+figure(1);
+f = fit(t', plateT', 'exp1');
+
+plot(t, plateT, 'k.'); hold on;
+plot(f, 'b-'); hold on;
+
+
+
+%% 2
+
+load('lab6MetalForced2.mat');
+
+plot(tempPlateC, 'o');
+
+
+
