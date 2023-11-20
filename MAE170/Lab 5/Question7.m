@@ -9,7 +9,7 @@ data = zeros(30, 15);
 for i = 1:30
     for j = 1:15
         
-         data(i, j) = recMatrix_sig(210, i, j);
+         data(i, j) = recMatrix_sig(250, i, j);
      
          
 
