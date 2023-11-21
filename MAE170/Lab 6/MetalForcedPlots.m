@@ -31,7 +31,7 @@ t = 0:length(avgPlateT)-1;
 
 theta = (avgPlateT-avgAmbT)/(avgPlateT(1)-avgAmbT);
 
-plot(t, log(theta));
+plot(t, log(theta), 'bo');
 
 
 
