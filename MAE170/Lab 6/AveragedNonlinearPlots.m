@@ -191,6 +191,22 @@ f2 = polyfit(x2, y2, 1);
 f3 = polyfit(x3, y3, 1);
 f4 = polyfit(x4, y4, 1);
 
+rho_a = 1180; c_a = 2000; k_a = 0.2;
+rho_m = 2707; c_m = 879; k_m = 204; L = 0.00041;
+
+
+h1 = -f1(1)*rho_a*L*c_a;
+h2 = -f2(1)*rho_a*L*c_a;
+h3 = -f3(1)*rho_m*L*c_m;
+h4 = -f4(1)*rho_m*L*c_m;
+
+Bi1 = h1*L/k_a;
+Bi2 = h2*L/k_a;
+Bi3 = h3*L/k_m;
+Bi4 = h4*L/k_m;
+
+
+
 plot(x1, f1(1)*x1 + f1(2),'b--'); hold on;
 plot(x2, f2(1)*x2 + f2(2), 'g-.'); hold on;
 plot(x3, f3(1)*x3 + f3(2), 'r:'); hold on;
