@@ -137,7 +137,7 @@ angled(k)=angle_degrees;
 if mod(k,10)==0 % display every 10 frames to the command line
 k
 end
-pause(0.2); % pause for 200 ms for each frame to allow time for plotting
+%pause(0.2); % pause for 200 ms for each frame to allow time for plotting
 end
 %shift measured angles to be from 0 to 360 instead of -180 to 180 degrees
 
@@ -157,3 +157,15 @@ for i=2:frames
         adjustedangle(i:frames)=adjustedangle(i:frames)-360;
     end
 end
+
+%% PLOTS
+
+figure(1);
+subplot(3, 1, 1); hold on;
+t = (1:length(angled))/30;
+
+plot(t, angled); hold on;
+
+
+subplot(3, 1, 2); hold on;
+plot(t, adjustedangle); hold on;

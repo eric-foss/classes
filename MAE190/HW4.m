@@ -22,3 +22,24 @@ set(gca, 'YDir', 'reverse');
 xlabel('Speed of Sound (m/s)'); ylabel('Depth (m)');
 title("Speed of Sound compared to Depth");
 
+
+%% Problem 5
+
+s1 = [100; -50];
+s2 = [-350; 500];
+s3 = [-100; -150];
+
+d1 = 292;
+d2 = 424;
+d3 = 354;
+
+b = [s1'*s1 - d1^2;
+    s2'*s2 - d2^2;
+    s3'*s3 - d3^2];
+
+A = [2*s1', -1;
+    2*s2', -1;
+    2*s3', -1];
+
+y = A\b;
+
