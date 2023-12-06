@@ -33,7 +33,7 @@ title('Cropped Image in Grayscale');
 
 %% Threshold Image
 figure(03)
-threshold=150; % threshold value to turn grayscale into binary (0 to 255)
+threshold=160; % threshold value to turn grayscale into binary (0 to 255)
 dims_img = size(testfig_crop_gray); % get image dimensions
 test_fig_binary=uint8(zeros(dims_img)); % initialize a new figure with zeros
 for i=1:dims_img(1) % loop along the cropped grayscale image rows
@@ -52,11 +52,11 @@ title('Cropped Binary Image with Identified Points');
 
 %% Identify points in first binary image
 hold on % turn  hold’ on to allow addtl. plots to be overlayed on binary plot
-rot_min = 18; % rotating point minimum pixel radius
+rot_min = 19; % rotating point minimum pixel radius
 rot_max = 140; % rotating point maximum pixel radius
-ctr_min = 10; % center point minimum pixel radius
-ctr_max = 17; % center point maximum pixel radius
-rot_sens = 0.954; % algorithm sensitivity to find rotating point
+ctr_min = 8; % center point minimum pixel radius
+ctr_max = 16; % center point maximum pixel radius
+rot_sens = 0.962; % algorithm sensitivity to find rotating point
 ctr_sens = 0.93; % algorithm sensitivity to find center point
 [rotatingpoint.center,rotatingpoint.radii] = imfindcircles(test_fig_binary,[rot_min rot_max],'ObjectPolarity','dark','Sensitivity',rot_sens);
 % find dark circles in the range of 10 to 30 pixel radii (in this case, this will be the "rotating point”)
@@ -136,6 +136,7 @@ angle_degrees=angle*180/pi
 angled(k)=angle_degrees;
 if mod(k,10)==0 % display every 10 frames to the command line
 k
+
 end
 %pause(0.2); % pause for 200 ms for each frame to allow time for plotting
 end
@@ -164,19 +165,23 @@ t = (1:length(angled))/30;
 dt = t(2)-t(1);
 figure(1);
 subplot(3, 1, 1); hold on;
-plot(t, angled); hold on;
-
+plot(t, angled, 'b-'); hold on;
+xlabel('Time (s)'); ylabel('Angle Measured');
+xlim([0 6.7]);
 
 subplot(3, 1, 2); hold on;
-plot(t, adjustedangle); hold on;
-
+plot(t, adjustedangle, 'b-'); hold on;
+xlabel('Time (s)'); ylabel('Total Rotation Angle');
+xlim([0 6.7]);
 
 subplot(3, 1, 3);
-omega = zeros(1, length(adjustedangle));
+omega = gradient(adjustedangle)./gradient(t);
 for i = 2:length(adjustedangle)
 
     omega(i) = (adjustedangle(i) - adjustedangle(i-1))/dt;
 
-
 end
-plot(t, omega);
+plot(t, omega, 'b-'); hold on;
+xlabel('Time (s)'); ylabel('Angular Velocity');
+xlim([0 6.7]);
+
