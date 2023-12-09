@@ -166,22 +166,21 @@ dt = t(2)-t(1);
 figure(1);
 subplot(3, 1, 1); hold on;
 plot(t, angled, 'b-'); hold on;
+xline(4.3, 'r-'); hold on;
 xlabel('Time (s)'); ylabel('Angle Measured (deg)');
 xlim([0 6.7]);
 
 subplot(3, 1, 2); hold on;
 plot(t, adjustedangle, 'b-'); hold on;
+xline(4.3, 'r-'); hold on;
 xlabel('Time (s)'); ylabel('Total Rotation Angle (deg)');
 xlim([0 6.7]);
 
 subplot(3, 1, 3);
 omega = gradient(adjustedangle)./gradient(t);
-for i = 2:length(adjustedangle)
 
-    omega(i) = (adjustedangle(i) - adjustedangle(i-1))/dt;
-
-end
 plot(t, omega, 'b-'); hold on;
+xline(4.3, 'r-'); hold on;
 xlabel('Time (s)'); ylabel('Angular Velocity (deg/s)');
 xlim([0 6.7]);
 
