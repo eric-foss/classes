@@ -96,7 +96,7 @@ v_bar = squeeze(mean(v(150:end, :, :)));
 [nt, nx, ny] = size(u); %define data lengths
 
 
-figure(4);
+
 %Animation Loop
 for i = 1:nt
 
@@ -135,23 +135,7 @@ v_bar = squeeze(mean(v(150:end, :, :))); %v average
 
 [nt, nx, ny] = size(u); %define data lengths
 
-for i = 1:nt
-    
-    uprime(i, :, :) = squeeze(u(i, :, :)) - u_bar;
-    vprime(i, :, :) = squeeze(v(i, :, :)) - v_bar;
-
-end
-
-k = sqrt(squeeze(mean(uprime(150:end, :, :).^2 + vprime(150:end, :, :).^2)));
+uprime = 
 
 
-
-figure(5); hold on;
-title('Turbulence Kinetic Energy');
-xlabel('x'); ylabel('y');
-pcolor(x, y, k);
-rectangle('Position',[-0.5 -0.5 1 1],'Curvature',[1 1],'LineStyle','none','FaceColor',[1 1 1]); hold off;
-shading interp;
-axis equal tight;
-colorbar;
 
