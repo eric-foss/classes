@@ -68,14 +68,24 @@ axis equal tight;
 clear all; close all; clc; %reset workspace
 load("cylinder_Re100.mat"); %load data
 
-u_bar = squeeze(mean(u(150:end, :, :)));
-v_bar = squeeze(mean(v(150:end, :, :)));
-startX = [0.5];
-startY = [0.5];
+u_bar = squeeze(mean(u(150:end, :, :))); %u mean
+v_bar = squeeze(mean(v(150:end, :, :))); %v mean
 
-verts = stream2(x, y, u_bar, v_bar, startX, startY);
+%Plot u flow field
+figure(3); hold on;
+title('Horizontal Velocity w/ Streamlines');
+xlabel('x');
+ylabel('y');
+pcolor(x, y, squeeze(u_bar)); %plot u flow field
+rectangle('Position',[-0.5 -0.5 1 1],'Curvature',[1 1],'LineStyle','none','FaceColor',[1 1 1]);
+shading interp;
+axis equal tight;
 
-lineObj = streamline(verts);
+%Plot streamlines
+[startX, startY] = meshgrid(-5, -5:0.5:5); %initial xy coords for streamlines
+verts = stream2(x', y', u_bar', v_bar', startX, startY);
+lineObj = streamline(verts); %plot streamlines
+
 
 
 
