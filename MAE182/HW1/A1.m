@@ -116,13 +116,13 @@ clear all; close all; clc;
 mu = 398600; %gravitational parameter for earth [km^3/s^2]
 I = [1; 0; 0]; J = [0; 1; 0;]; K = [0; 0; 1]; %cordinate frame unit vectors
 
-r = [200; 0; 0];
+r = [200+6371; 0; 0];
 v = [0; sqrt(mu/norm(r)); 0];
 
 
 x0 = [r; v];
 xdot = @(x)[x(4:6);  -mu/(norm(x(1:3))^3)*x(1:3)];
-time = 0:20:100;
+time = [0; 3600*1];
 
 [t, y] = ode45(@(t, x) xdot(x), time, x0, odeset('RelTol',1e-12,'AbsTol',1e-15)); %ode
 
