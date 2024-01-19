@@ -36,8 +36,23 @@ koe(6) = E - norm(e)*sin(E); %Mean anomoly [rads]
 
 % Problem 1b
 
+ec = koe(2);
+M = koe(6);
 
+i = 1;
+E(i) = M;
 
+f(i) = M - E(i) + ec*sin(E(i));
+while (abs(f(i)) > 10^(-12))
+    
+    
+    E(i+1) = E(i) + f(i)/(1 - ec*cos(E(i)));
+    i = i + 1;
+    f(i) = M - E(i) + ec*sin(E(i));
+   
+end
+
+E = E(i);
 
 % Problem 1c
 
