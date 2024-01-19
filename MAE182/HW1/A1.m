@@ -110,20 +110,3 @@ plot(time, denergy, 'k-');
 xlim ([0 2*T]); ylim([-1 1]);
 
 
-%% Problem 2
-clear all; close all; clc;
-% Problem 2a
-mu = 398600; %gravitational parameter for earth [km^3/s^2]
-I = [1; 0; 0]; J = [0; 1; 0;]; K = [0; 0; 1]; %cordinate frame unit vectors
-
-r = [200+6371; 0; 0];
-v = [0; sqrt(mu/norm(r)); 0];
-
-
-x0 = [r; v];
-xdot = @(x)[x(4:6);  -mu/(norm(x(1:3))^3)*x(1:3)];
-time = [0; 3600*1];
-
-[t, y] = ode45(@(t, x) xdot(x), time, x0, odeset('RelTol',1e-12,'AbsTol',1e-15)); %ode
-
-plot3(y(:, 1), y(:, 2), y(:, 3));
