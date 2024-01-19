@@ -36,7 +36,6 @@ time2 = [0; T2];
 
 [t2, y2] = ode45(@(t, x) xdot(x), time2, x0_2, odeset('RelTol',1e-12,'AbsTol',1e-15)); %ode
 
-[pos2, vel2, acc2] = posvelacc(t2, y2, mu, 2);
 
 %hohmann transfer
 ah = (norm(r1) + norm(r2))/2; %semi-major axis of Hohmann Transfer [km]
@@ -54,18 +53,6 @@ x0_h = [rp; vp]; %initial state
 timeh = [0; Th];
 
 [th, yh] = ode45(@(t, x) xdot(x), timeh, x0_h, odeset('RelTol',1e-12,'AbsTol',1e-15)); %ode
-[posh, velh, acch] = posvelacc(th, yh, mu, 3);
-
-%3D plot
-figure(4); hold on;
-plot3(y1(:, 1), y1(:, 2), y1(:, 3), 'b-'); %parking
-plot3(y2(:, 1), y2(:, 2), y2(:, 3), 'r-'); %GEO
-plot3(yh(:, 1), yh(:, 2), yh(:, 3), 'g-'); %hohmann
-
-view([-37.5 -30]);
-title('Demonstration of Hohmann Transfer (ECI Coordinates)');
-xlabel('x (km)'); ylabel('y (km)'); zlabel('z (km)');
-legend('Parking Orbit', 'GEO Orbit', 'Hohmann Transfer');
 
 %deltaV calcs
 dv1 = norm(vp) - norm(v1);
@@ -73,36 +60,61 @@ dv2 = norm(v2) - norm(va);
 
 %% Part b
 
-%Hohmann Transfer
+%misaligned hohmann transfer
 rp = r1; %initial position [km]
-vp_ma = v1 + [dv1*sind(1); dv1*cosd(1); 0]; %Mis-aligned Hohmann Transfer velocity [km/s]
+vp_ma = v1 + [dv1*sind(1); dv1*cosd(1); 0]; %misaligned hohmann transfer velocity [km/s]
 
 x0_ma = [rp; vp_ma]; %initial state
 
 [th_ma, yh_ma] = ode45(@(t, x) xdot(x), timeh, x0_ma, odeset('RelTol',1e-12,'AbsTol',1e-15)); %ode
 
 
-%High Orbit (probs no longer GEO I would imagine)
+%high Orbit (probs no longer GEO I would imagine)
 r3 = yh_ma(end, 1:3)';
 va_ma = yh_ma(end, 4:6)';
 v3 = va_ma + dv2*va_ma/norm(va_ma);
 
+%find period
 energy3 = 0.5*dot(v3, v3) - mu/norm(r3); %specific energy [km^2/s^2]
 a3 = -mu/(2*energy3); %semi-major axis [km]
 T3 = 2*pi/sqrt(mu/a3^3); %period of orbit
 
-x0_3 = [r3; v3];
-time3 = [0; T3];
+%propagation
+x0_3 = [r3; v3]; %initial state
+time3 = [0; T3]; %define time vector for ode
 
 [t3, y3] = ode45(@(t, x) xdot(x), time3, x0_3, odeset('RelTol',1e-12,'AbsTol',1e-15)); %ode
 
-%3D plot
-figure(5); hold on;
-plot3(y1(:, 1), y1(:, 2), y1(:, 3), 'b-'); %Parking
-plot3(y3(:, 1), y3(:, 2), y3(:, 3), 'r-'); %High
-plot3(yh_ma(:, 1), yh_ma(:, 2), yh_ma(:, 3), 'g-'); %Mis-aligned Hohmann Transfer
 
-view([-37.5 -30]);
-title('Hohmann Transfer with Mis-aligned DeltaV1 (ECI Coordinates)');
+
+%% PLOTS
+%Plot of Orbits
+figure(4); hold on;
+plot(y1(:, 1), y1(:, 2), 'b-'); %parking
+plot(yh(:, 1), yh(:, 2), 'g-'); %hohmann
+plot(y2(:, 1), y2(:, 2), 'r-'); %GEO
+plot(y3(:, 1), y3(:, 2), 'c--'); %High
+plot(yh_ma(:, 1), yh_ma(:, 2), 'k--'); %Misaligned Hohmann Transfer
+
+
+title('Demonstration of Hohmann Transfer (ECI Coordinates)');
 xlabel('x (km)'); ylabel('y (km)'); zlabel('z (km)');
-legend('Parking Orbit', 'High Orbit', 'Hohmann Transfer');
+axis equal tight;
+legend('Parking Orbit', 'Hohmann Transfer', 'GEO Orbit', 'Misaligned High Orbit', 'Misaligned Hohmann Tranfer');
+
+
+%Position Plots
+% figure(5); hold on;
+% subplot(2, 1, 1);
+% 
+% yh_mag = zeros(length(yh), 1);
+% yh_ma_mag = zeros(length(yh_ma), 1);
+% for i = 1:length(yh)
+%     yh_mag(i) = norm(yh(i, 1:3));
+% end
+% for i = 1:length(yh_ma)
+%     yh_ma_mag(i) = norm(yh_ma(i, 1:3));
+% end
+% 
+% plot(th, yh_mag, 'b-'); hold on;
+% plot(th_ma, yh_ma_mag, 'r--');
