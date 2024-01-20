@@ -24,7 +24,7 @@ xdot = @(x)[x(4:6); -mu/(norm(x(1:3))^3)*x(1:3)]; %derivative of State
 
 [t, x] = ode45(@(t, x) xdot(x), time, x0, odeset('RelTol',1e-12,'AbsTol',1e-15)); %ode
 
-[pos, vel, acc] = posvelacc(t, x, mu, 1);
+[pos, vel, acc] = posvelacc(t, x, mu, 1); %plot function
 
 %% Part d
 
@@ -33,9 +33,7 @@ energy0 = 0.5*vel(1)^2 - mu/pos(1); %find initial energy
 
 %loop through each state
 for i = 1:length(time)
-
     denergy(i) = 0.5*vel(i)^2 - mu/pos(i) - energy0; %change in energy
-
 end
 
 %plot
