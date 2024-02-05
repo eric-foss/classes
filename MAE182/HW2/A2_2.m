@@ -37,32 +37,32 @@ end
 %PLOTS
 figure(1);
 %Semi-major Axis Plot
-subplot(2, 3, 1);
+subplot(3, 2, 1);
 plot(t/3600, koe(:, 1), 'b-');
 title('Semi-Major Axis over 1 Day'); xlabel('Time (hr)'); ylabel('Semi-Major Axis (km)');
 xlim([0 24]);
 %Eccentricity Plot
-subplot(2, 3, 2);
+subplot(3, 2, 2);
 plot(t/3600, koe(:, 2), 'b-');
 title('Eccentricity over 1 Day'); xlabel('Time (hr)'); ylabel('Eccentricity');
 xlim([0 24]);
 %Inclination Plot
-subplot(2, 3, 3);
+subplot(3, 2, 3);
 plot(t/3600, koe(:, 3), 'b-');
 title('Inclination Angle over 1 Day'); xlabel('Time (hr)'); ylabel('Inclination (rad)');
 xlim([0 24]);
 %Right Ascension Plot
-subplot(2, 3, 4);
+subplot(3, 2, 4);
 plot(t/3600, koe(:, 4), 'b-');
 title('Right Ascension over 1 Day'); xlabel('Time (hr)'); ylabel('Right Ascension (rad)');
 xlim([0 24]);
 %Argument of Periapsis Plot
-subplot(2, 3, 5);
+subplot(3, 2, 5);
 plot(t/3600, koe(:, 5), 'b-');
 title('Argument of Pariapsis over 1 Day'); xlabel('Time (hr)'); ylabel('Argument of Periapsis (rad)');
 xlim([0 24]);
 %Mean Anomoly Plot
-subplot(2, 3, 6);
+subplot(3, 2, 6);
 plot(t/3600, koe(:, 6), 'b-');
 title('Mean Anomoly over 1 Day'); xlabel('Time (hr)'); ylabel('Mean Anomoly (rad)');
 xlim([0 24]);
