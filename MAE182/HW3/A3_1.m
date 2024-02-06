@@ -43,6 +43,7 @@ end
 cdata = imread(image_file);
 set(globe, 'FaceColor', 'texturemap', 'CData', cdata, 'FaceAlpha', alpha, 'EdgeColor', 'none');
 
+%Orbit Plot
 plot3(y(:, 1), y(:, 2), y(:, 3), 'r');
 title('Atmospheric Drag Simulation in ECI Frame');
 
@@ -71,7 +72,7 @@ xlim([0 24]);
 
 koe = zeros(length(t), 6);
 for i = 1:length(x)
-    koe(i, :) = rv2koe(x(i, 1:3), x(i, 4:6), const.mu, const.J2, const.Re, 'rad');
+    koe(i, :) = rv2koe(x(i, 1:3), x(i, 4:6), const.mu, 'rad');
 end
 
 %PLOTS
