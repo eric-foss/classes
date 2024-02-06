@@ -1,4 +1,4 @@
-function [ koe ] = rv2koe( r, v, mu, angletype )
+function [ koe ] = rv2koe( r, v, mu, J2, Re, angletype )
 %{
 FILENAME: rv2koe
 
@@ -45,7 +45,8 @@ nhat = cross(K,h)/norm(cross(K,h));     % normalized ascending node vector
 e      = (1/mu)*cross(v,h) - rhat;      % eccentricity vector
 koe(2) = norm(e);
 
-energy = (1/2)*dot(v,v) - mu/norm(r);   % energy, km^2/s^2
+U = (mu/norm(r))*(1 - J2*(Re/norm(r))^2*(3/2*(r(3)/norm(r))^2 - 1/2));
+energy = (1/2)*dot(v,v) - U;   % energy, km^2/s^2
 %  If energy < 0, the orbit is closed (periodic)
 
 %  Semi-major axis (a) and parameter (p)

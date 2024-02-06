@@ -71,7 +71,7 @@ xlim([0 24]);
 
 koe = zeros(length(t), 6);
 for i = 1:length(x)
-    koe(i, :) = rv2koe(x(i, 1:3), x(i, 4:6), const.mu, 'rad');
+    koe(i, :) = rv2koe(x(i, 1:3), x(i, 4:6), const.mu, const.J2, const.Re, 'rad');
 end
 
 %PLOTS
