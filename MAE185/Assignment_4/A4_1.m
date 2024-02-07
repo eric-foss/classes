@@ -1,6 +1,6 @@
 %%MAE185 Assignment 4 Problem 1
 % Eric Foss
-% A17068006'
+% A17068006
 clear; close all; clc;
 
 load('supersonicJetLES_xyPlane.mat');
