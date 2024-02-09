@@ -25,13 +25,18 @@ x_ref0 = [x_ref0; reshape(phi0, 16, 1)]; %initial ref state w/ stm
 
 X_ref = x(i, 1:4); %ref states at t = 0 10 20 ...
 
-phi = x(i, 5:20);
+phi = x(i, 5:20); %unshaped stm
+
+Phi = zeros(4, 4, 11); %initialize stm 3d matrix
+for i = 1:11
+    Phi(:, :, i) = reshape(phi(i, :), 4, 4); %shaped stm
+end
 
 %% Part C
 
-dX1 = X_true - X_ref;
+dX1 = X_true - X_ref; %true deviation
 
 dX2 = zeros(11, 4);
 for i = 1:11
-    dX2(i, :) = reshape(phi(i, :), 4, 4)*dX0;
+    dX2(i, :) = reshape(phi(i, :), 4, 4)*dX0; %stm determined deviation
 end
