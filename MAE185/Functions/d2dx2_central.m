@@ -9,14 +9,14 @@ end %if
 df = zeros(size(f)); %initialize difference matrix
 
 %central second difference
-for i = 2:length(f)
+for i = 2:(length(f)-1)
     for j = 1:width(f)
         df(i, j) = (f(i+1, j) - 2*f(i, j) + f(i-1, j))/(dx^2);
     end %for
 end %for
 
 switch bc
-    case periodic %periodic boundry conditions
+    case 'periodic' %periodic boundry conditions
         for j = 1:width(f)
             i = 1;
             df(i, j) = (f(i+1, j) - 2*f(i, j) + f(length(f), j))/(dx^2);
