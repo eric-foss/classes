@@ -14,15 +14,12 @@ const.h = 5.4; %height of observation [m]
 phi0 = eye(2);
 X0_ref = [4; 0.2; reshape(phi0, 4, 1)];
 
-%Weighting Matrix
-R = [0.0625 0;
-     0 0.01];
-
 %A Priori
 x0_bar = [0; 0];
 P0_bar = [1000 0;
           0 100;];
 
+%Measurement Data
 t = 0:10;
 Y = [6.37687486186585, -0.00317546143535849;
      5.50318198665912,  1.17587430814596;
@@ -36,23 +33,30 @@ Y = [6.37687486186585, -0.00317546143535849;
      5.67697312013520,  1.42173765213734;
      5.25263404969825, -0.12082311844776];  
 
+%Weighting Matrix (Measurement Noise)
+R = [0.0625 0;
+     0 0.01];
+
 %BATCH FILTER
 itr = 4; %number of filter iterations
 Lambda = inv(P0_bar);
 N = Lambda*x0_bar;
 
-
+%Iterations
 for j = 1:itr
 
-    [~, X_ref] = ode45(@springDynamics, t, X0_ref, odeset('RelTol',1e-12,'AbsTol',1e-15), const); %propagate
+    %Propagate Initial Reference State
+    [~, X_ref] = ode45(@springDynamics, t, X0_ref, odeset('RelTol',1e-12,'AbsTol',1e-15), const);
     phi = reshape(X_ref(:, 3:end)', 2, 2, 11);
     X_ref = reshape(X_ref(:, 1:2)', 2, 11);
 
+    %Initialize Vectors
     H_tilde = zeros(2, 2, 11);
     H = zeros(2, 2, 11);
     rho = zeros(11, 1);
     y = zeros(2, 11);
 
+    %Loop through measurements
     for i = 1:11
         
         rho(i) = sqrt(X_ref(1, i)^2 + const.h^2);
@@ -69,13 +73,23 @@ for j = 1:itr
 
     end
 
+    %find initial deviation and covariance
     x0_hat = inv(Lambda)*N;
     P0 = inv(Lambda);
 
+    %update initial reference
     X0_ref = [X0_ref(1:2) + x0_hat; X0_ref(3:end)];
     x0_bar = x0_bar - x0_hat;
     Lambda = inv(P0_bar);
     N = Lambda*x0_bar;
 end
+
+%Results
+pos0 = X0_ref(1);
+vel0 = X0_ref(2);
+sigma_pos0 = sqrt(P0(1, 1));
+sigma_vel0 = sqrt(P0(2, 2));
+rho_pos0vel0 = P0(1, 2)/(sigma_pos0*sigma_vel0);
+
 
 
