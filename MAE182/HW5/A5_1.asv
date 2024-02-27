@@ -3,10 +3,7 @@
 % A17068006
 clear; close all; clc;
 
-%% Part A: Batch Algorithm
-
 % Initial State
-phi0 = eye(3);
 X0_ref = [1; 1; 1];
 
 % A Piori
@@ -19,10 +16,55 @@ P0_bar = [4 0 0;
 t = 1;
 Y = 2;
 R = 1;
+H_tilde = [1 0 0];
 
-X_ref(:, 1) = X0_ref;
-X_ref(:, 2) = [1 t 0.5*t^2;
-               0 1 t;
-               0 0 1]*X0_ref;
+%% Batch Algorithm
+
+%STM and State
+phi1 = stm(1);
+X1_ref = phi1*X0_ref;
+
+%H Matrix
+H1 = H_tilde*phi1;
+
+%Observation Deviation
+y = Y - X1_ref(1);
+
+%Initial State Deviation
+x0_hat = inv(H1'*inv(R)*H1 + inv(P0_bar))*(H1'*inv(R)*y + inv(P0_bar)*x0_bar);
+
+%Estimated Initial State
+X0_hat = X0_ref + x0_hat %%PART A ANSWER%%
+
+%% Sequential Algorithm
+
+%STM and State
+phi1 = stm(t);
+X1_ref = phi1*X0_ref;
+
+%Observation Deviation
+y = Y - X1_ref(1);
+
+%A Priori Reference Covariance
+P1_bar = phi1*P0_bar*phi1';
+
+%Kalman Gain
+K1 = P1_bar*H_tilde'*inv(H_tilde*P1_bar*H_tilde' + R);
+
+%
+X1_hat = X1_ref + K1*()
+
+
+function phi = stm(t)
+%STM Computes state transition matrix from 0 to t for the dynamics in HW5
+%Problem 1
+
+    phi = [1 t 0.5*t^2;
+           0 1 t;
+           0 0 1];
+
+end
+
+
+
     
-y = Y
