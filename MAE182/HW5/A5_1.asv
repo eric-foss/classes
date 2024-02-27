@@ -34,7 +34,7 @@ y1 = Y - X1_ref(1);
 x0_hat = inv(H1'*inv(R)*H1 + inv(P0_bar))*(H1'*inv(R)*y1 + inv(P0_bar)*x0_bar);
 
 %Estimated Initial State
-X0_hat_A = X0_ref + x0_hat; %%PART A ANSWER%%
+X0_hat = X0_ref + x0_hat %%PART A ANSWER%%
 
 %% Sequential Algorithm
 
@@ -59,16 +59,15 @@ x1_hat = x1_bar + K1*(y1 - H_tilde*x1_bar);
 x0_hat = inv(phi1)*x1_hat;
 
 %Estimated Initial State
-X0_hat_B = X0_ref + x0_hat; %%PART B ANSWER%%
+X0_hat = X0_ref + x0_hat %%PART B ANSWER%%
 
 
 %%PART C%%
 
-%Estimated t = 1 State
-X1_hat_C = X1_ref + x1_hat; %%PART C ANSWER%%
+%St
+X1_hat = X1_ref + x1_hat %%PART C ANSWER%%
 
-%Map Back to Estimated Initial State
-X0_hat_C = inv(phi1)*X1_hat_C;
+X0_hat = inv(phi1)*X1_hat
 
 function phi = stm(t)
 %STM Computes state transition matrix from 0 to t for the dynamics in HW5
