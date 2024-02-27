@@ -4,42 +4,57 @@
 clear; close all; clc;
 
 
-delta = 1e-6;
+syms d;
 
 y = [3; 2];
 
-H = [1 delta;
+H = [1     d;
      1     1];
 
 X0_ref = [4; 7];
 
-P0 = [1/delta^2         0;
-      0         1/delta^2];
+P0 = [1/d^2         0;
+      0         1/d^2];
 
 R = eye(2);
+
+d = 1e-6;
+delta = zeros(10, 1);
+tr_exact = zeros(10, 1);
+tr_kalman = zeros(10, 1);
+tr_joseph = zeros(10, 1);
+tr_batch = zeros(10, 1);
+
+for i = 1:10
+    
+    %Exact
+    mat = [1 + 2*d^2   -(1+d);
+            -(1 + d)    2+d^2];
+    beta = 1 - 2*d + 2*(2+d^2)*d^2;
+    P2_exact = mat/beta; %%PART A ANSWER%%
+    tr_exact(i) = trace(P2_exact);
+    
+    %Kalman
+    
+
+end
 
 
 %% Part A
 
-beta = 1 - 2*delta + 2*(2+delta^2)*delta^2;
 
-mat = [1 + 2*delta^2  -(1+delta);
-       -(1 + delta)    2+delta^2];
-P2_exact = mat/beta %%PART A ANSWER%%
+
+
 
 %% Part B
 
-mat = [-1   1;
-        1  -1];
-P2_kalman = mat/(1-2*delta) %%PART B ANSWER%%
+
 
 %% Part C
 
-P2_joseph = [  1 + 2*delta   -(1+3*delta);
-             -(1 + 3*delta)   (2 + delta)]; %%PART C ANSWER%%
+
 
 
 %% Part D
 
-P2_batch = [ 1 + 2*delta   -(1 + 3*delta);
-            -(1 + 3*delta)  2*(1+2*delta)];
+
