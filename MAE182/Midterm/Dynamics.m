@@ -1,11 +1,6 @@
-function Xdot = Dynamics(~, X, const)
+function Xdot = dynamics(~, X, const)
 %DYNAMICS Summary of this function goes here
 %   Detailed explanation goes here
-
-
-
-%% Symbolic
-syms theta
 
 x = X(1);
 y = X(2);
@@ -16,48 +11,36 @@ w = X(6);
 mu = X(7);
 J2 = X(8);
 Cd = X(9);
-xs1 = X(10);
-ys1 = X(11);
-zs1 = X(12);
-xs2 = X(13);
-ys2 = X(14);
-zs2 = X(15);
-xs3 = X(16);
-ys3 = X(17);
-zs3 = X(18);
 
-theta = const.theta;
-Re = const.Re;
-A = const.A;
-m = const.m;
-rho0 = const.rho0;
-r0 = const.r0;
-H = const.H;
-thetadot = const.thetadot;
+r = norm(X(1:3));
+
+%Gravity with J2
+k = J2*mu*const.Re^2;
+a_g = [-(2*mu*x*r^4 - 15*k*x*z^2 + 3*k*x*r^2)/(2*r^7);
+       -(2*mu*y*r^4 - 15*k*y*z^2 + 3*k*y*r^2)/(2*r^7);
+       -(2*mu*z*r^4 - 15*k*z^3   + 9*k*z*r^2)/(2*r^7)];
 
 
+%Drag
+vA = [u + const.thetadot*y;
+      v - const.thetadot*x;
+                         w];
 
-%%Gravity with J2 Pertubations
-r = [x; y; z]; %symbloic position
-rmag = sqrt(x^2 + y^2 + z^2); %position magnitude
-U_prime(x, y, z, u, v, w, mu, J2, Re) = (mu/rmag)*(1 - J2*(Re/rmag)^2 * ((3/2)*(z/rmag)^2 - 1/2)); %given U' function
-a_g = gradient(U_prime, r);
+rho = const.rho0*exp((const.r0-r)/const.H);
 
-
-%%Drag due to Atmosphere
-
-vA(x, y, u, v, w, thetadot) = [u + thetadot*y;
-                               v - thetadot*x;
-                                            w];
-
-rho(x, y, z, rho0, r0, H) = rho0*exp((r0-rmag)/H);
-
-a_drag(x, y, z, u, v, w, rho0, r0, H, Cd, A, m, thetadot) = -0.5*Cd*(A/m)*rho*(norm(vA)^2)*vA;
+a_drag = -0.5*Cd*(const.S/const.m)*rho*norm(vA)*vA;
 
 rddot = a_g + a_drag;
 
-Xdot = [u; v; w; rddot; 0; 0; 0; 0; 0; 0; 0; 0; 0; 0; 0; 0];
+%%STM
+phi = reshape(X(19:end), 9, 9);
+A = findA(X(1), X(2), X(3), X(4), X(5), X(6), X(7), X(8), X(9), const.S, const.H, const.Re, const.m, const.r0, const.rho0, const.thetadot);
 
+phidot = A(1:9, 1:9)*phi;
+
+xdot = A*X(1:18);
+
+Xdot = [X(4:6); rddot; 0; 0; 0; 0; 0; 0; 0; 0; 0; 0; 0; 0; reshape(phidot, 81, 1)];
 
 end
 

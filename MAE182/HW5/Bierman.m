@@ -17,8 +17,8 @@ R = 1;
 
 %Exact
 beta = 1 - 2*d + 2*(2 + d^2)*d^2;
-P2_exact = [1 + 2*d^2 -(1 + d);
-            -(1 + d)   (2*d^2)]/beta;
+P2_exact = [1 + 2*d^2, -(1 + d);
+            -(1 + d),   (2 + d^2)]/beta;
 
 %Kalman
 K1 = P0*H1'*inv(H1*P0*H1' + R);
@@ -41,4 +41,3 @@ P2_batch = inv(H2'*inv(R)*H2 + inv(P1_batch));
 X2_batch = inv(H'*inv(R)*H + inv(P0))*(H'*inv(R)*[y1; y2] + inv(P0)*X0);
 
 end
-

@@ -68,7 +68,7 @@ X0_hat_B = X0_ref + x0_hat; %%PART B ANSWER%%
 X1_hat_C = X1_ref + x1_hat; %%PART C ANSWER%%
 
 %Map Back to Estimated Initial State
-X0_hat_C = inv(phi1)*X1_hat_C;
+X0_hat_C = inv(phi1)*X1_hat_C; %%PART C ANSWER%%
 
 function phi = stm(t)
 %STM Computes state transition matrix from 0 to t for the dynamics in HW5
@@ -79,7 +79,3 @@ function phi = stm(t)
            0 0 1];
 
 end
-
-
-
-    

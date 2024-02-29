@@ -3,8 +3,8 @@
 % A17068006
 clear; close all; clc;
 
-
 d = 1e-6;
+
 delta = zeros(10, 1);
 tr_exact = zeros(10, 1);
 tr_kalman = zeros(10, 1);
