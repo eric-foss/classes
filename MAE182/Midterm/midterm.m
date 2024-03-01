@@ -1,13 +1,16 @@
 %%MAE 182 Midterm
 % Eric Foss
 %A17068006
+
+%% Generate Matlab Functions %%%%%%%%%%%%%%%%%
 symA;
-symHtilde;
+symH_tilde;
 clear; close all; clc;
 
-%% Project Parameters
+%% Project Parameters %%%%%%%%%%%%%%%%%%%%%%%%
 
-%%%%Constant Parameters%%%%
+
+%Constant Parameters
 const.thetadot = 7.2921158553e-5; %Earth Rotation Rate [rad/s]
 const.Re = 6378136.3; %Radius of Earth [m]
 const.S = 3; %Cross-section area of Satellite [m^2]
@@ -32,7 +35,7 @@ phi0 = eye(9); %Initial STM (only top left quad)
 
 X0 = [r0; v0; mu0; J20; Cd0; rs1; rs2; rs3; reshape(phi0, 81, 1)]; %Initial State Vector
 
-%% Propagation
+%% Propagation %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 time = 0:20:18340;
 [ts, X] = ode45(@dynamics, time, X0, odeset('RelTol',1e-12,'AbsTol',1e-15), const); %numerical integration
 
@@ -50,7 +53,7 @@ for i = 1:918
     phi(i, 10:end, 10:end) = eye(9);
 end
 
-%% Observations
+%% Observations %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 Y = readmatrix('exam_obs_data.txt');
 n = height(Y); %Number of observations
 
@@ -63,11 +66,11 @@ for i = 1:n
 
     t = Y(i, 1); %Time passed since epoch
     station = Y(i, 2); %Corresponding station number
-    [H_tilde(i, :, :), G(i, :)] = computeHTilde(t, X(1 + t/20, :), station, const); %H_tilde matrix and range/range rate
+    [H_tilde(i, :, :), G(i, :)] = computeH_tilde(t, X(1 + t/20, :), station, const); %H_tilde matrix and range/range rate
 
 end 
 
-%% Results
+%% Results %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %Problem 1
 A0 = computeA(X0(1), X0(2), X0(3), X0(4), X0(5), X0(6), X0(7), X0(8), X0(9), ...
@@ -76,7 +79,7 @@ H_tilde0 = squeeze(H_tilde(1, :, :)); %Initial H_tilde matrix
 
 %Problem 2
 rvf = [r(end, :), v(end, :)]; %Final satellite position/velocity
-phif = squeeze(phi(end, :, :)); %Final STM
+phif = squeeze(phi(end, 1:9, 1:9)); %Final STM (top left quad)
 
 %Problem 3
 y = Y(:, 3:4) - G; %Range/Range-rate residuals
