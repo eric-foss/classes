@@ -56,10 +56,11 @@ n = height(Y); %Number of observations
 
 %Preallocations
 H_tilde = zeros(height(Y), 2, 18);
+phi = zeros(height(Y), 18, 18);
 G = zeros(height(Y), 2);
 
 %Observation Loop
-for i = 1:n
+for i = 1:height(Y)
 
     t = Y(i, 1); %Time passed since epoch
     station = Y(i, 2); %Corresponding station number
@@ -67,33 +68,26 @@ for i = 1:n
 
 end 
 
+
+
+
 %% Results
 
 %Problem 1
 A0 = computeA(X0(1), X0(2), X0(3), X0(4), X0(5), X0(6), X0(7), X0(8), X0(9), ...
-    const.S, const.H, const.Re, const.m, const.r0, const.rho0, const.thetadot); %Initial A matrix
-H_tilde0 = squeeze(H_tilde(1, :, :)); %Initial H_tilde matrix
+    const.S, const.H, const.Re, const.m, const.r0, const.rho0, const.thetadot); %Initial A Matrix
+H_tilde0 = squeeze(H_tilde(1, :, :)); %Initial H_tilde Matrix
 
 %Problem 2
 rvf = [r(end, :), v(end, :)]; %Final satellite position/velocity
 phif = squeeze(phi(end, :, :)); %Final STM
 
 %Problem 3
-y = Y(:, 3:4) - G; %Range/Range-rate residuals
+y = Y(:, 3:4) - G; %Range/Range-rate Residuals
 
-RMS_range = sqrt(sum(y(:, 1).^2)/n);
-RMS_rate = sqrt(sum(y(:, 2).^2)/n);
+RMS_range = sqrt(sum(y(:, 1).^2)/height(y));
 
-%Plots
+
 figure(1);
 subplot(1, 2, 1);
-plot(1:n, y(:, 1)); %Range residuals plot
-title('Range Residuals');
-xlabel('Observation Number'); ylabel('Range Residual [m]');
-xlim([0 n]); ylim([-1500 2000]);
-
-subplot(1, 2, 2);
-plot(1:n, y(:, 2)); %Range-rate residual plot
-title('Range-rate Residuals');
-xlabel('Observation Number'); ylabel('Range-rate Residual [m/s]');
-xlim([0 n]);
+plot()

@@ -34,12 +34,12 @@ rddot = a_g + a_drag;
 
 %%STM
 phi = reshape(X(19:end), 9, 9);
-A = findA(X(1), X(2), X(3), X(4), X(5), X(6), X(7), X(8), X(9), const.S, const.H, const.Re, const.m, const.r0, const.rho0, const.thetadot);
+A = computeA(X(1), X(2), X(3), X(4), X(5), X(6), X(7), X(8), X(9), const.S, const.H, const.Re, const.m, const.r0, const.rho0, const.thetadot);
 
 phidot = A(1:9, 1:9)*phi;
 
-xdot = A*X(1:18);
 
+%Full Dynamics
 Xdot = [X(4:6); rddot; 0; 0; 0; 0; 0; 0; 0; 0; 0; 0; 0; 0; reshape(phidot, 81, 1)];
 
 end
