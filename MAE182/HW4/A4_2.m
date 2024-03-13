@@ -17,7 +17,7 @@ X0_ref = [4; 0.2; reshape(phi0, 4, 1)];
 %A Priori
 x0_bar = [0; 0];
 P0_bar = [1000 0;
-          0 100;];
+          0 100];
 
 %Measurement Data
 t = 0:10;

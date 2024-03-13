@@ -1,6 +1,6 @@
 %%MAE 182 Midterm
 % Eric Foss
-%A17068006
+% A17068006
 
 %% Generate Matlab Functions %%%%%%%%%%%%%%%%%
 symA;
