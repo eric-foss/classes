@@ -99,6 +99,20 @@ for j = 1:itr
 
     end 
 
+    %Plots
+    figure(1);
+    subplot(itr, 2, j*2 - 1);
+    plot(1:n, y(:, 1)); %Range residuals plot
+    title('Range Residuals');
+    xlabel('Observation Number'); ylabel('Range Residual [m]');
+    xlim([0 n]);
+    
+    subplot(itr, 2, j*2);
+    plot(1:n, y(:, 2)); %Range-rate residual plot
+    title('Range-rate Residuals');
+    xlabel('Observation Number'); ylabel('Range-rate Residual [m/s]');
+    xlim([0 n]);
+
     x0_hat = Lambda\N;
     P0 = inv(Lambda);
 
